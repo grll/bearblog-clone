@@ -22,5 +22,8 @@ from core import views
 
 urlpatterns = [
     path("", views.homepage, name="homepage"),
+    path("blogs/", views.blog_list, name="blog_list"),
+    path("blog/<slug:subdomain>/", views.blog_detail, name="blog_detail"),
+    path("blog/<slug:subdomain>/<slug:slug>/", views.post_detail, name="post_detail"),
     path("admin/", admin.site.urls),
 ]

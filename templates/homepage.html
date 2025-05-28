@@ -10,9 +10,13 @@
 </div>
 
 <div class="nav-buttons">
-    <a href="{% url 'homepage' %}#signup">Sign up</a>
-    <a href="{% url 'homepage' %}#login">Log in</a>
-    <a href="{% url 'homepage' %}#discover">Discover</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'admin:index' %}">Admin Dashboard</a>
+        <a href="{% url 'admin:logout' %}">Log out</a>
+    {% else %}
+        <a href="{% url 'admin:login' %}">Log in</a>
+    {% endif %}
+    <a href="{% url 'blog_list' %}">Discover</a>
 </div>
 
 <p>This is a blogging platform where words matter most.</p>

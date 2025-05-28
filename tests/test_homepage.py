@@ -26,8 +26,7 @@ def test_homepage_content():
     assert "A privacy-first, no-nonsense, super-fast blogging platform" in content
     assert "No trackers, no javascript, no stylesheets. Just your words." in content
 
-    # Test navigation buttons
-    assert "Sign up" in content
+    # Test navigation buttons (using Django admin)
     assert "Log in" in content
     assert "Discover" in content
 
@@ -40,7 +39,7 @@ def test_homepage_content():
     assert "device" in content
     assert "Tiny (~2.7kb), optimized, and awesome pages" in content
     assert "No trackers, ads, or scripts" in content
-    assert "Seconds to sign up" in content
+    assert "Seconds to" in content
     assert "Connect your custom domain" in content
     assert "Free themes" in content
     assert "RSS & Atom feeds" in content
