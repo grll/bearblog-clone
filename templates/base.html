@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}A privacy-first, no-nonsense, super-fast blogging platform{% endblock %}">
+    <title>{% block title %}Bear Blog{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        {% block header %}
+        <nav>
+            <a href="{% url 'homepage' %}" class="logo">ʕ•ᴥ•ʔ Bear</a>
+        </nav>
+        {% endblock %}
+    </header>
+    
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer>
+        {% block footer %}
+        <p>Built and maintained by <a href="https://herman.bearblog.dev">Herman</a>.</p>
+        <p>
+            <a href="https://docs.bearblog.dev/privacy-policy">Privacy Policy</a> |
+            <a href="https://docs.bearblog.dev/terms-of-service">Terms of Service</a> |
+            <a href="https://github.com/HermanMartinus/bearblog/">GitHub</a> |
+            <a href="https://docs.bearblog.dev/">Docs</a> |
+            <a href="https://bear.nolt.io/roadmap">Roadmap</a>
+        </p>
+        {% endblock %}
+    </footer>
+</body>
+</html>
