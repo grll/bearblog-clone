@@ -12,12 +12,6 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     content = models.TextField(help_text="You can use Markdown formatting")
-    image = models.ImageField(
-        upload_to="post_images/",
-        blank=True,
-        null=True,
-        help_text="Upload an image to include in your post",
-    )
     published = models.BooleanField(default=False)
     published_date = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -33,14 +27,36 @@ class Post(models.Model):
         md = markdown.Markdown(extensions=["extra", "codehilite", "toc"])
         return mark_safe(md.convert(self.content))
     
-    def get_image_markdown(self):
-        """Get markdown syntax for the image."""
-        if self.image:
-            return f"![{self.image.name}]({self.image.url})"
-        return ""
+    def get_all_images_markdown(self):
+        """Get markdown syntax for all PostImage instances."""
+        markdown_list = []
+        for img in self.images.all():
+            markdown_list.append(img.get_markdown())
+        return "\n\n".join(markdown_list)
 
     def __str__(self):
         return self.title
 
     class Meta:
         ordering = ["-published_date", "-created_at"]
+
+
+class PostImage(models.Model):
+    """Images associated with blog posts."""
+    
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="post_images/")
+    caption = models.CharField(max_length=200, blank=True, help_text="Optional caption for the image")
+    order = models.PositiveIntegerField(default=0, help_text="Order of display (lower numbers first)")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def get_markdown(self):
+        """Get markdown syntax for this image."""
+        alt_text = self.caption or f"Image {self.order + 1}"
+        return f"![{alt_text}]({self.image.url})"
+    
+    def __str__(self):
+        return f"Image for {self.post.title} ({self.order})"
+    
+    class Meta:
+        ordering = ["order", "created_at"]

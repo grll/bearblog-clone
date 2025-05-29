@@ -5,7 +5,17 @@ from django.http import JsonResponse
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import os
-from .models import Post
+from .models import Post, PostImage
+
+
+class PostImageInline(admin.TabularInline):
+    model = PostImage
+    extra = 1  # Show one empty form by default for easy adding
+    min_num = 0
+    fields = ["image", "caption", "order"]
+    ordering = ["order"]
+    verbose_name = "Image"
+    verbose_name_plural = "Images"
 
 
 @admin.register(Post)
@@ -16,15 +26,16 @@ class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     date_hierarchy = "created_at"
     ordering = ["-created_at"]
+    inlines = [PostImageInline]
 
     fieldsets = (
-        (None, {"fields": ("author", "title", "slug", "content", "image")}),
+        (None, {"fields": ("author", "title", "slug", "content")}),
         ("Publishing", {"fields": ("published", "published_date")}),
     )
 
     class Media:
         css = {"all": ("admin/css/post_admin.css",)}
-        js = ("admin/js/post_admin.js",)
+        js = ("admin/js/post_admin.js", "admin/js/post_images.js")
 
     def get_urls(self):
         urls = super().get_urls()
