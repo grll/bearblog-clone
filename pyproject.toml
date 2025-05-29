@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "django>=5.2.1",
+    "gunicorn>=23.0.0",
     "markdown>=3.8",
     "pillow>=11.2.1",
     "pygal>=3.0.5",

@@ -31,10 +31,10 @@ cp .env.example .env
 mkdir -p data
 
 # Build and start
-docker-compose up -d --build
+docker compose up -d --build
 
 # Create superuser
-docker-compose exec web uv run python manage.py createsuperuser
+docker compose exec web uv run python manage.py createsuperuser
 ```
 
 ### 3. Cloudflare Setup

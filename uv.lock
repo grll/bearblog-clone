@@ -17,6 +17,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "django" },
+    { name = "gunicorn" },
     { name = "markdown" },
     { name = "pillow" },
     { name = "pygal" },
@@ -36,6 +37,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "django", specifier = ">=5.2.1" },
+    { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "markdown", specifier = ">=3.8" },
     { name = "pillow", specifier = ">=11.2.1" },
     { name = "pygal", specifier = ">=3.0.5" },
@@ -85,6 +87,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/12/a1/a17e5d2222f963fd1714325c2869adf27fab1299f1430d8913bfecc6e5c0/django_types-0.20.0.tar.gz", hash = "sha256:4e55d2c56155e3d69d75def9eb1d95a891303f2ac19fccf6fe8056da4293fae7", size = 178278 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/44/ee/d4cd24637f31cb131e629df64133f7960fcdc48a183918a352f02db0cd6f/django_types-0.20.0-py3-none-any.whl", hash = "sha256:a0b5c2c9a1e591684bb21a93b64e50ca6cb2d3eab48f49faff1eac706bd3a9c7", size = 374226 },
+]
+
+[[package]]
+name = "gunicorn"
+version = "23.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/34/72/9614c465dc206155d93eff0ca20d42e1e35afc533971379482de953521a4/gunicorn-23.0.0.tar.gz", hash = "sha256:f014447a0101dc57e294f6c18ca6b40227a4c90e9bdb586042628030cba004ec", size = 375031 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cb/7d/6dac2a6e1eba33ee43f318edbed4ff29151a49b5d37f080aad1e6469bca4/gunicorn-23.0.0-py3-none-any.whl", hash = "sha256:ec400d38950de4dfd418cff8328b2c8faed0edb0d517d3394e457c317908ca4d", size = 85029 },
 ]
 
 [[package]]
