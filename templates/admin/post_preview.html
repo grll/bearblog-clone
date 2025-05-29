@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Preview: {{ post.title }} | {{ BLOG_TITLE }}{% endblock %}
+
+{% block content %}
+<div style="background-color: #ffffcc; padding: 10px; margin-bottom: 20px; border: 1px solid #cccc00;">
+    <strong>PREVIEW MODE</strong> - This post is not yet published.
+    <a href="{% url 'admin:core_post_change' post.id %}" style="float: right;">← Back to editing</a>
+</div>
+
+<article>
+    <h2>{{ post.title }}</h2>
+    <p class="meta">
+        <time datetime="{{ post.published_date|date:'c' }}">
+            {% if post.published_date %}
+                {{ post.published_date|date:"j M, Y" }}
+            {% else %}
+                Not published yet
+            {% endif %}
+        </time>
+    </p>
+    
+    <div class="post-content">
+        {{ post.get_content_as_markdown }}
+    </div>
+</article>
+{% endblock %}

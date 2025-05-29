@@ -121,6 +121,55 @@ article .meta {
     margin: 2em 0;
 }
 
+/* Markdown content styling */
+.post-content pre {
+    background-color: #f6f8fa;
+    padding: 1em;
+    overflow-x: auto;
+    border-radius: 3px;
+}
+
+.post-content code {
+    background-color: #f6f8fa;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.post-content pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+.post-content blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 1em;
+    margin-left: 0;
+    color: var(--muted-color);
+}
+
+.post-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.post-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+.post-content th, .post-content td {
+    border: 1px solid #ddd;
+    padding: 0.5em;
+    text-align: left;
+}
+
+.post-content th {
+    background-color: #f6f8fa;
+}
+
 /* Footer */
 footer {
     margin-top: 4em;

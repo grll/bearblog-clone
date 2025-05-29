@@ -10,8 +10,8 @@ def test_homepage_loads():
     response = client.get(reverse("homepage"))
 
     assert response.status_code == 200
-    assert b"My Blog" in response.content  # Blog title from settings
-    assert b"A minimal blog powered by Django" in response.content  # Blog description
+    assert b"Guillaume Raille" in response.content  # Blog title from settings
+    assert b"data scientist" in response.content  # Part of blog description
 
 
 @pytest.mark.django_db

@@ -127,4 +127,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Blog settings
 BLOG_TITLE = "Guillaume Raille"
 BLOG_DESCRIPTION = "I'm Guillaume, a data scientist turned LLM engineer who brings AI to real business problems. After 5+ years building data pipelines and NLP solutions for banks and insurance companies, I now co-found SubstantAI (AI agents that track what matters to you) and maintain open source tools around the MCP protocol. Always building end-to-end, from idea to production."
-BLOG_FOOTER_LINKS: list[tuple[str, str | None]] = [("GitHub", "https://github.com/grll",), ("LinkedIn", "https://www.linkedin.com/in/guillaumeraille/"), ("X", "https://x.com/guillaumeraille"), ("guillaume dot raille at gmail dot com", None)]  # List of tuples: [("GitHub", "https://github.com/..."), ...]
+BLOG_FOOTER_LINKS: list[tuple[str, str | None]] = [
+    (
+        "GitHub",
+        "https://github.com/grll",
+    ),
+    ("LinkedIn", "https://www.linkedin.com/in/guillaumeraille/"),
+    ("X", "https://x.com/guillaumeraille"),
+    ("guillaume dot raille at gmail dot com", None),
+]  # List of tuples: [("GitHub", "https://github.com/..."), ...]

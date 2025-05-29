@@ -10,7 +10,7 @@
     </p>
     
     <div class="post-content">
-        {{ post.content|linebreaks }}
+        {{ post.get_content_as_markdown }}
     </div>
 </article>
 

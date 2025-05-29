@@ -1,0 +1,19 @@
+/* Make the content textarea larger for easier editing */
+#id_content {
+    font-family: monospace;
+    min-height: 400px;
+    width: 100%;
+}
+
+/* Style the preview button */
+.submit-row .button {
+    background-color: #79aec8;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.submit-row .button:hover {
+    background-color: #609ab6;
+}
