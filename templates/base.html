@@ -4,18 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{% block meta_description %}A privacy-first, no-nonsense, super-fast blogging platform{% endblock %}">
-    <title>{% block title %}Bear Blog{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ BLOG_DESCRIPTION }}{% endblock %}">
+    <title>{% block title %}{{ BLOG_TITLE }}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
     <header>
-        {% block header %}
+        <h1><a href="{% url 'homepage' %}">{{ BLOG_TITLE }}</a></h1>
         <nav>
-            <a href="{% url 'homepage' %}" class="logo">ʕ•ᴥ•ʔ Bear</a>
+            <p>
+                <a href="{% url 'homepage' %}">Home</a>
+                <a href="{% url 'post_list' %}">Blog</a>
+            </p>
         </nav>
-        {% endblock %}
     </header>
     
     <main>
@@ -23,16 +25,9 @@
     </main>
     
     <footer>
-        {% block footer %}
-        <p>Built and maintained by <a href="https://herman.bearblog.dev">Herman</a>.</p>
-        <p>
-            <a href="https://docs.bearblog.dev/privacy-policy">Privacy Policy</a> |
-            <a href="https://docs.bearblog.dev/terms-of-service">Terms of Service</a> |
-            <a href="https://github.com/HermanMartinus/bearblog/">GitHub</a> |
-            <a href="https://docs.bearblog.dev/">Docs</a> |
-            <a href="https://bear.nolt.io/roadmap">Roadmap</a>
-        </p>
-        {% endblock %}
+        <div>
+            Powered by <a href="https://bearblog.dev">Bear ʕ•ᴥ•ʔ</a>
+        </div>
     </footer>
 </body>
 </html>

@@ -1,16 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Blog - Bear Blog{% endblock %}
+{% block title %}Blog | {{ BLOG_TITLE }}{% endblock %}
 
 {% block content %}
-<h1>Blog</h1>
-
 {% if posts %}
     <ul class="post-list">
     {% for post in posts %}
         <li>
-            <h2><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></h2>
-            <p class="meta">{{ post.published_date|date:"F j, Y" }} • by {{ post.author.username }}</p>
+            <time>{{ post.published_date|date:"j M, Y" }}</time>
+            <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
         </li>
     {% endfor %}
     </ul>

@@ -1,12 +1,12 @@
-/* Minimal Bear Blog style - following the "no-nonsense" philosophy */
+/* Minimal Bear Blog style - single blog version */
 :root {
-    --width: 720px;
+    --width: 600px;
     --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --font-scale: 1em;
     --background-color: #fff;
-    --heading-color: #222;
-    --text-color: #444;
-    --link-color: #0066cc;
+    --heading-color: #000;
+    --text-color: #000;
+    --link-color: #0000ee;
     --muted-color: #666;
 }
 
@@ -19,7 +19,7 @@
 body {
     font-family: var(--font-main);
     font-size: var(--font-scale);
-    line-height: 1.5;
+    line-height: 1.6;
     color: var(--text-color);
     background-color: var(--background-color);
     padding: 20px;
@@ -27,15 +27,38 @@ body {
     margin: 0 auto;
 }
 
+/* Header */
+header {
+    margin-bottom: 2em;
+}
+
+header h1 {
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+header h1 a {
+    color: var(--heading-color);
+    text-decoration: none;
+}
+
+header h1 a:hover {
+    text-decoration: underline;
+}
+
+header nav p {
+    margin: 0;
+}
+
+header nav a {
+    margin-right: 1em;
+}
+
+/* Typography */
 h1, h2, h3, h4, h5, h6 {
     color: var(--heading-color);
     margin: 1em 0 0.5em;
-    line-height: 1.2;
-}
-
-h1 {
-    font-size: 1.5em;
-    margin-top: 0;
+    font-weight: bold;
 }
 
 h2 {
@@ -44,16 +67,10 @@ h2 {
 
 h3 {
     font-size: 1.1em;
-    font-weight: normal;
-}
-
-h4 {
-    font-size: 0.9em;
 }
 
 a {
     color: var(--link-color);
-    text-decoration: none;
 }
 
 a:hover {
@@ -69,145 +86,34 @@ ul, ol {
     padding-left: 2em;
 }
 
-li {
-    margin: 0.5em 0;
+/* Main content */
+main {
+    min-height: 60vh;
 }
 
-/* Homepage specific styles */
-.hero {
-    text-align: center;
-    margin: 2em 0 3em;
-}
-
-.hero h1 {
-    font-size: 2em;
-    margin-bottom: 0.2em;
-}
-
-.hero h2 {
-    font-size: 1.5em;
-    font-weight: normal;
-    margin-bottom: 0.5em;
-}
-
-.hero h3 {
-    font-size: 1.2em;
-    color: var(--muted-color);
-    font-weight: normal;
-}
-
-.nav-buttons {
-    margin: 2em 0;
-    text-align: center;
-}
-
-.nav-buttons a {
-    display: inline-block;
-    margin: 0 0.5em;
-    padding: 0.5em 1.5em;
-    border: 1px solid var(--link-color);
-    border-radius: 3px;
-}
-
-.nav-buttons a:hover {
-    background-color: var(--link-color);
-    color: white;
-    text-decoration: none;
-}
-
-.features {
-    margin: 3em 0;
-}
-
-.features h4 {
-    margin: 2em 0 1em;
-    font-style: italic;
-}
-
-.features em {
-    color: var(--heading-color);
-    font-style: italic;
-}
-
-.cta {
-    text-align: center;
-    margin: 3em 0;
-}
-
-.cta h3 {
-    font-size: 1.3em;
-    margin-bottom: 1em;
-}
-
-.bear-hands {
-    font-size: 1.2em;
-}
-
-footer {
-    margin-top: 4em;
-    padding-top: 2em;
-    border-top: 1px solid #eee;
-    text-align: center;
-    font-size: 0.9em;
-    color: var(--muted-color);
-}
-
-footer p {
-    margin: 0.5em 0;
-}
-
-footer a {
-    margin: 0 0.5em;
-}
-
-/* Blog and post lists */
-.blog-list, .post-list {
+/* Post list */
+.post-list {
     list-style: none;
     padding: 0;
 }
 
-.blog-list li {
-    margin: 2em 0;
-    padding-bottom: 2em;
-    border-bottom: 1px solid #eee;
-}
-
-.blog-list li:last-child {
-    border-bottom: none;
-}
-
-.blog-list h2 {
-    margin: 0 0 0.5em 0;
-}
-
-.blog-description {
-    font-style: italic;
-    color: var(--muted-color);
-    margin: 1em 0 2em;
-}
-
 .post-list li {
-    margin: 1em 0;
-    display: flex;
+    margin: 0.8em 0;
 }
 
-.post-list .date {
-    flex: 0 0 120px;
+.post-list time {
     color: var(--muted-color);
-    font-family: monospace;
-    font-size: 0.9em;
+    margin-right: 1em;
 }
 
-.meta {
-    color: var(--muted-color);
-    font-size: 0.9em;
-}
-
-article h1 {
+/* Post detail */
+article h2 {
     margin-bottom: 0.2em;
 }
 
 article .meta {
+    color: var(--muted-color);
+    font-size: 0.9em;
     margin-bottom: 2em;
 }
 
@@ -215,22 +121,27 @@ article .meta {
     margin: 2em 0;
 }
 
-/* Responsiveness */
-@media (max-width: 768px) {
+/* Footer */
+footer {
+    margin-top: 4em;
+    padding-top: 2em;
+    border-top: 1px solid #ccc;
+    font-size: 0.9em;
+    color: var(--muted-color);
+}
+
+footer div {
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
     body {
         padding: 15px;
     }
     
-    .nav-buttons a {
+    .post-list time {
         display: block;
-        margin: 0.5em 0;
-    }
-    
-    .post-list li {
-        flex-direction: column;
-    }
-    
-    .post-list .date {
         margin-bottom: 0.2em;
     }
 }

@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ post.title }} - Bear Blog{% endblock %}
+{% block title %}{{ post.title }} | {{ BLOG_TITLE }}{% endblock %}
 
 {% block content %}
 <article>
-    <h1>{{ post.title }}</h1>
+    <h2>{{ post.title }}</h2>
     <p class="meta">
-        <time datetime="{{ post.published_date|date:'c' }}">{{ post.published_date|date:"M d, Y" }}</time>
-        • by {{ post.author.username }}
+        <time datetime="{{ post.published_date|date:'c' }}">{{ post.published_date|date:"j M, Y" }}</time>
     </p>
     
     <div class="post-content">
@@ -15,5 +14,5 @@
     </div>
 </article>
 
-<p><a href="{% url 'post_list' %}">← Back to all posts</a></p>
+<p><a href="{% url 'post_list' %}">← Back to blog</a></p>
 {% endblock %}

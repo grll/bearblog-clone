@@ -62,6 +62,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.blog_settings",
             ],
         },
     },
@@ -122,3 +123,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Blog settings
+BLOG_TITLE = "My Blog"
+BLOG_DESCRIPTION = "A minimal blog powered by Django"
+BLOG_FOOTER_LINKS: list[tuple[str, str]] = []  # List of tuples: [("GitHub", "https://github.com/..."), ...]

@@ -1,44 +1,21 @@
 {% extends "base.html" %}
 
-{% block header %}{% endblock %}
-
 {% block content %}
-<div class="hero">
-    <h1>ʕ•ᴥ•ʔ Bear</h1>
-    <h2>A privacy-first, no-nonsense, super-fast blogging platform</h2>
-    <h3>No trackers, no javascript, no stylesheets. Just your words.</h3>
-</div>
+<p>{{ BLOG_DESCRIPTION }}</p>
 
-<div class="nav-buttons">
-    {% if user.is_authenticated %}
-        <a href="{% url 'admin:index' %}">Admin Dashboard</a>
-        <a href="{% url 'admin:logout' %}">Log out</a>
-    {% else %}
-        <a href="{% url 'admin:login' %}">Log in</a>
-    {% endif %}
-    <a href="{% url 'post_list' %}">Blog</a>
-</div>
+{% if BLOG_FOOTER_LINKS %}
+<p>
+    {% for name, url in BLOG_FOOTER_LINKS %}
+        <a href="{{ url }}">{{ name }}</a>
+        {% if not forloop.last %}|{% endif %}
+    {% endfor %}
+</p>
+{% endif %}
 
-<p>This is a blogging platform where words matter most.</p>
-
-<div class="features">
-    <h4>Shun the bloat of the current web, embrace the <em>bear</em> necessities.</h4>
-    
-    <ul>
-        <li>Looks great on <em>any</em> device</li>
-        <li>Tiny (~2.7kb), optimized, and awesome pages</li>
-        <li>No trackers, ads, or scripts</li>
-        <li>Seconds to sign up</li>
-        <li>Connect your custom domain</li>
-        <li>Free themes</li>
-        <li>RSS & Atom feeds</li>
-        <li>Built to last forever<sup><a href="https://herman.bearblog.dev/manifesto/">*</a></sup></li>
-    </ul>
-    
-    <p><a href="https://herman.bearblog.dev">View example blog</a></p>
-</div>
-
-<div class="cta">
-    <h3>Publish something awesome with your <em>bear</em> hands <a href="https://herman.bearblog.dev/praise-for-bear/" class="bear-hands">ᕦʕ •ᴥ•ʔᕤ</a></h3>
-</div>
+{% if user.is_authenticated and user.is_staff %}
+<p>
+    <a href="{% url 'admin:index' %}">Admin Dashboard</a> |
+    <a href="{% url 'admin:logout' %}">Log out</a>
+</p>
+{% endif %}
 {% endblock %}

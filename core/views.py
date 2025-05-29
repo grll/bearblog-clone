@@ -4,7 +4,7 @@ from .models import Post
 
 
 def homepage(request):
-    """Homepage view with marketing content."""
+    """Blog homepage."""
     return render(request, "homepage.html")
 
 
