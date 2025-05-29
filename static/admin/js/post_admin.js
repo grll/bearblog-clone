@@ -156,31 +156,34 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // Auto-update preview data every 2 seconds
-        if (!isExistingPost) {
-            setInterval(function() {
-                const title = document.querySelector('#id_title');
-                const content = document.querySelector('#id_content');
+        // Auto-update preview data every 2 seconds for both new and existing posts
+        setInterval(function() {
+            const title = document.querySelector('#id_title');
+            const content = document.querySelector('#id_content');
+            
+            if (title && content) {
+                // Send current form data to update session
+                const formData = new FormData();
+                formData.append('title', title.value || 'Untitled');
+                formData.append('content', content.value || '');
                 
-                if (title && content) {
-                    // Send current form data to update session
-                    const formData = new FormData();
-                    formData.append('title', title.value || 'Untitled');
-                    formData.append('content', content.value || '');
-                    
-                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
-                    if (csrfToken) {
-                        formData.append('csrfmiddlewaretoken', csrfToken.value);
-                    }
-                    
-                    // Silent POST to update session (include popup parameter)
-                    fetch('/admin/core/post/preview/new/?_popup=1', {
-                        method: 'POST',
-                        body: formData,
-                        credentials: 'same-origin'
-                    });
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+                if (csrfToken) {
+                    formData.append('csrfmiddlewaretoken', csrfToken.value);
                 }
-            }, 2000);
-        }
+                
+                // URL depends on whether it's a new or existing post
+                const updateUrl = isExistingPost 
+                    ? `/admin/core/post/preview/${postId}/?_popup=1`
+                    : '/admin/core/post/preview/new/?_popup=1';
+                
+                // Silent POST to update session
+                fetch(updateUrl, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+            }
+        }, 2000);
     }
 });

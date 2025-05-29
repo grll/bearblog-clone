@@ -40,10 +40,26 @@ class PostAdmin(admin.ModelAdmin):
 
     def preview_post(self, request, post_id):
         """Preview an existing post."""
+        # Get the saved post
         post = get_object_or_404(Post, pk=post_id)
 
+        if request.method == "POST":
+            # Store preview data in session for existing posts
+            request.session["preview_title"] = request.POST.get("title", post.title)
+            request.session["preview_content"] = request.POST.get(
+                "content", post.content
+            )
+            request.session["preview_post_id"] = str(post_id)
+            request.session.save()
+
+        # Check if we have session data for this post
+        if request.session.get("preview_post_id") == str(post_id):
+            # Use session data if available
+            post.title = request.session.get("preview_title", post.title)
+            post.content = request.session.get("preview_content", post.content)
+
         # Check if this is a popup
-        is_popup = "_popup" in request.GET
+        is_popup = "_popup" in request.GET or "_popup" in request.POST
         template = (
             "admin/post_preview_popup.html" if is_popup else "admin/post_preview.html"
         )
