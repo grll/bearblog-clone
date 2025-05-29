@@ -1,7 +1,7 @@
 [project]
 name = "bearblog-clone"
 version = "0.1.0"
-description = "Add your description here"
+description = "A minimalist single-author blog platform inspired by Bear Blog"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
