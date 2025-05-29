@@ -4,8 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-import os
-from .models import Post, PostImage
+from .models import Post, PostImage, PageView, DailyAnalytics
 
 
 class PostImageInline(admin.TabularInline):
@@ -136,19 +135,35 @@ class PostAdmin(admin.ModelAdmin):
             return JsonResponse({"success": False, "error": "No image provided"})
 
         image_file = request.FILES["image"]
-        
+
         # Generate a unique filename
         filename = f"preview_{image_file.name}"
         file_path = f"post_images/{filename}"
-        
+
         # Save the file
         saved_path = default_storage.save(file_path, ContentFile(image_file.read()))
-        
+
         # Return the URL
         image_url = request.build_absolute_uri(default_storage.url(saved_path))
-        
-        return JsonResponse({
-            "success": True,
-            "url": image_url,
-            "filename": filename
-        })
+
+        return JsonResponse({"success": True, "url": image_url, "filename": filename})
+
+
+# Register analytics models
+@admin.register(PageView)
+class PageViewAdmin(admin.ModelAdmin):
+    list_display = ["path", "timestamp", "ip_address", "post"]
+    list_filter = ["timestamp", "post"]
+    search_fields = ["path", "ip_address", "user_agent"]
+    date_hierarchy = "timestamp"
+    ordering = ["-timestamp"]
+    readonly_fields = ["timestamp"]
+
+
+@admin.register(DailyAnalytics)
+class DailyAnalyticsAdmin(admin.ModelAdmin):
+    list_display = ["date", "unique_visitors", "unique_reads", "total_views"]
+    list_filter = ["date"]
+    date_hierarchy = "date"
+    ordering = ["-date"]
+    readonly_fields = ["date", "unique_visitors", "unique_reads", "total_views"]

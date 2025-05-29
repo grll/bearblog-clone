@@ -8,6 +8,7 @@ dependencies = [
     "django>=5.2.1",
     "markdown>=3.8",
     "pillow>=11.2.1",
+    "pygal>=3.0.5",
     "pygments>=2.19.1",
 ]
 

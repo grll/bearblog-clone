@@ -21,11 +21,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from core import views
+from core.analytics_views import analytics_dashboard, analytics_chart
 
 urlpatterns = [
     path("", views.homepage, name="homepage"),
     path("blog/", views.post_list, name="post_list"),
     path("blog/<slug:slug>/", views.post_detail, name="post_detail"),
+    path("admin/analytics/", analytics_dashboard, name="admin_analytics"),
+    path("admin/analytics/chart/", analytics_chart, name="admin_analytics_chart"),
     path("admin/", admin.site.urls),
 ]
 

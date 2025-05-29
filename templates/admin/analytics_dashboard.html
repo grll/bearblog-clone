@@ -1,0 +1,201 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Analytics | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .analytics-header {
+        margin-bottom: 30px;
+    }
+    
+    .analytics-header h1 {
+        font-size: 36px;
+        font-weight: normal;
+        margin: 0 0 20px 0;
+    }
+    
+    .analytics-stats {
+        font-size: 24px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+    
+    .analytics-stats strong {
+        font-weight: normal;
+    }
+    
+    .analytics-period {
+        color: #666;
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+    
+    .analytics-chart {
+        margin: 30px 0;
+        background: white;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .analytics-chart svg {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Match the screenshot style */
+    .analytics-chart svg .axis text {
+        font-size: 14px;
+    }
+    
+    .analytics-chart svg .bar rect {
+        fill: #ff6b6b !important;
+        opacity: 0.8;
+    }
+    
+    .analytics-chart svg .guides .guide {
+        stroke: #ddd;
+        stroke-dasharray: 5, 5;
+    }
+    
+    .analytics-chart svg .axis .guide {
+        stroke: #333;
+    }
+    
+    .analytics-sections {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 30px;
+    }
+    
+    .analytics-section {
+        background: white;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .analytics-section h2 {
+        font-size: 20px;
+        margin: 0 0 15px 0;
+        font-weight: normal;
+    }
+    
+    .analytics-section table {
+        width: 100%;
+    }
+    
+    .analytics-section table td {
+        padding: 5px 0;
+    }
+    
+    .post-views {
+        text-align: right;
+        color: #666;
+    }
+    
+    .date-selector {
+        margin-bottom: 20px;
+    }
+    
+    .date-selector a {
+        margin-right: 15px;
+        text-decoration: none;
+        color: #0066cc;
+    }
+    
+    .date-selector a.active {
+        font-weight: bold;
+        color: #333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+    <div class="analytics-header">
+        <h1>Analytics</h1>
+        
+        <div class="analytics-stats">
+            <div><strong>Unique reads:</strong> {{ unique_reads }}</div>
+            <div><strong>Unique visitors:</strong> {{ unique_visitors }}</div>
+        </div>
+        
+        <div class="analytics-period">
+            Displaying the past {{ days }} days
+        </div>
+        
+        <div class="date-selector">
+            <a href="?days=7" {% if days == 7 %}class="active"{% endif %}>7 days</a>
+            <a href="?days=30" {% if days == 30 %}class="active"{% endif %}>30 days</a>
+            <a href="?days=90" {% if days == 90 %}class="active"{% endif %}>90 days</a>
+        </div>
+    </div>
+    
+    <div class="analytics-chart">
+        {{ chart_svg|safe }}
+    </div>
+    
+    <div class="analytics-sections">
+        <div class="analytics-section">
+            <h2>Top Posts</h2>
+            <table>
+                {% for post in top_posts %}
+                <tr>
+                    <td><a href="{% url 'admin:core_post_change' post.id %}">{{ post.title|truncatechars:40 }}</a></td>
+                    <td class="post-views">{{ post.view_count }} views</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2">No posts viewed in this period</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <div class="analytics-section">
+            <h2>Recent Visitors</h2>
+            <table>
+                {% for view in recent_views|slice:":10" %}
+                <tr>
+                    <td>{{ view.path|truncatechars:40 }}</td>
+                    <td class="post-views">{{ view.timestamp|timesince }} ago</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2">No recent visitors</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    
+    <div class="analytics-sections">
+        <div class="analytics-section">
+            <h2>Daily Breakdown</h2>
+            <table>
+                {% for day in daily_data %}
+                <tr>
+                    <td>{{ day.date|date:"M j, Y" }}</td>
+                    <td class="post-views">{{ day.unique_visitors }} visitors</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2">No data available</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <div class="analytics-section">
+            <h2>Actions</h2>
+            <p><a href="{% url 'admin:core_pageview_changelist' %}">View all page views</a></p>
+            <p><a href="{% url 'admin:core_dailyanalytics_changelist' %}">View daily analytics</a></p>
+            <p><a href="{% url 'admin:index' %}">Back to admin</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
