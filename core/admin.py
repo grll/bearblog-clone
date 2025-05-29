@@ -30,11 +30,16 @@ class PostAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.preview_post),
                 name="core_post_preview",
             ),
+            path(
+                "preview/new/",
+                self.admin_site.admin_view(self.preview_new_post),
+                name="core_post_preview_new",
+            ),
         ]
         return custom_urls + urls
 
     def preview_post(self, request, post_id):
-        """Preview a post before publishing."""
+        """Preview an existing post."""
         post = get_object_or_404(Post, pk=post_id)
         return render(
             request,
@@ -44,3 +49,23 @@ class PostAdmin(admin.ModelAdmin):
                 "opts": self.model._meta,
             },
         )
+
+    def preview_new_post(self, request):
+        """Preview a new post before saving."""
+        if request.method == "POST":
+            # Create a temporary post object (not saved to DB)
+            post = Post(
+                title=request.POST.get("title", "Untitled"),
+                content=request.POST.get("content", ""),
+                author=request.user,
+            )
+            return render(
+                request,
+                "admin/post_preview.html",
+                {
+                    "post": post,
+                    "opts": self.model._meta,
+                    "is_new": True,
+                },
+            )
+        return render(request, "admin/post_preview.html", {"error": "Invalid request"})

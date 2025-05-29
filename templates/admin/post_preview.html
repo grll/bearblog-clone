@@ -5,7 +5,11 @@
 {% block content %}
 <div style="background-color: #ffffcc; padding: 10px; margin-bottom: 20px; border: 1px solid #cccc00;">
     <strong>PREVIEW MODE</strong> - This post is not yet published.
-    <a href="{% url 'admin:core_post_change' post.id %}" style="float: right;">← Back to editing</a>
+    {% if not is_new %}
+        <a href="{% url 'admin:core_post_change' post.id %}" style="float: right;">← Back to editing</a>
+    {% else %}
+        <a href="javascript:window.close();" style="float: right;">Close preview</a>
+    {% endif %}
 </div>
 
 <article>
