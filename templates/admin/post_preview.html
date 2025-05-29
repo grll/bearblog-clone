@@ -2,6 +2,13 @@
 
 {% block title %}Preview: {{ post.title }} | {{ BLOG_TITLE }}{% endblock %}
 
+{% block extra_head %}
+{% if is_new %}
+<!-- Auto-refresh every 2 seconds for new posts -->
+<meta http-equiv="refresh" content="2">
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <div style="background-color: #ffffcc; padding: 10px; margin-bottom: 20px; border: 1px solid #cccc00;">
     <strong>PREVIEW MODE</strong> - This post is not yet published.

@@ -53,19 +53,27 @@ class PostAdmin(admin.ModelAdmin):
     def preview_new_post(self, request):
         """Preview a new post before saving."""
         if request.method == "POST":
-            # Create a temporary post object (not saved to DB)
-            post = Post(
-                title=request.POST.get("title", "Untitled"),
-                content=request.POST.get("content", ""),
-                author=request.user,
-            )
-            return render(
-                request,
-                "admin/post_preview.html",
-                {
-                    "post": post,
-                    "opts": self.model._meta,
-                    "is_new": True,
-                },
-            )
-        return render(request, "admin/post_preview.html", {"error": "Invalid request"})
+            # Store preview data in session
+            request.session["preview_title"] = request.POST.get("title", "Untitled")
+            request.session["preview_content"] = request.POST.get("content", "")
+            request.session.save()
+
+        # Get preview data from session (works for both POST and GET)
+        title = request.session.get("preview_title", "Untitled")
+        content = request.session.get("preview_content", "")
+
+        # Create a temporary post object (not saved to DB)
+        post = Post(
+            title=title,
+            content=content,
+            author=request.user,
+        )
+        return render(
+            request,
+            "admin/post_preview.html",
+            {
+                "post": post,
+                "opts": self.model._meta,
+                "is_new": True,
+            },
+        )

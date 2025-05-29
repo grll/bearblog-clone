@@ -73,8 +73,35 @@ document.addEventListener('DOMContentLoaded', function() {
             const note = document.createElement('div');
             note.style.marginTop = '10px';
             note.style.color = '#666';
-            note.innerHTML = '<strong>Note:</strong> You can use Markdown formatting in your posts. Use the Preview button to see how it will look.';
+            note.innerHTML = '<strong>Note:</strong> You can use Markdown formatting in your posts. Use the Preview button to see how it will look. The preview will auto-refresh every 2 seconds.';
             contentField.parentNode.appendChild(note);
+        }
+        
+        // Auto-update preview data every 2 seconds
+        if (!isExistingPost) {
+            setInterval(function() {
+                const title = document.querySelector('#id_title');
+                const content = document.querySelector('#id_content');
+                
+                if (title && content) {
+                    // Send current form data to update session
+                    const formData = new FormData();
+                    formData.append('title', title.value || 'Untitled');
+                    formData.append('content', content.value || '');
+                    
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+                    if (csrfToken) {
+                        formData.append('csrfmiddlewaretoken', csrfToken.value);
+                    }
+                    
+                    // Silent POST to update session
+                    fetch('/admin/core/post/preview/new/', {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'same-origin'
+                    });
+                }
+            }, 2000);
         }
     }
 });
