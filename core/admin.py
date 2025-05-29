@@ -41,12 +41,20 @@ class PostAdmin(admin.ModelAdmin):
     def preview_post(self, request, post_id):
         """Preview an existing post."""
         post = get_object_or_404(Post, pk=post_id)
+
+        # Check if this is a popup
+        is_popup = "_popup" in request.GET
+        template = (
+            "admin/post_preview_popup.html" if is_popup else "admin/post_preview.html"
+        )
+
         return render(
             request,
-            "admin/post_preview.html",
+            template,
             {
                 "post": post,
                 "opts": self.model._meta,
+                "is_popup": is_popup,
             },
         )
 
@@ -68,12 +76,20 @@ class PostAdmin(admin.ModelAdmin):
             content=content,
             author=request.user,
         )
+
+        # Check if this is a popup
+        is_popup = "_popup" in request.GET or "_popup" in request.POST
+        template = (
+            "admin/post_preview_popup.html" if is_popup else "admin/post_preview.html"
+        )
+
         return render(
             request,
-            "admin/post_preview.html",
+            template,
             {
                 "post": post,
                 "opts": self.model._meta,
                 "is_new": True,
+                "is_popup": is_popup,
             },
         )

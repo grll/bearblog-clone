@@ -15,11 +15,14 @@ document.addEventListener('DOMContentLoaded', function() {
         previewBtn.style.float = 'left';
         previewBtn.style.marginRight = '10px';
         
-        // Handle preview click
-        previewBtn.onclick = function() {
+        // Handle preview click - use Django's popup style
+        previewBtn.onclick = function(e) {
+            e.preventDefault();
+            const win = window.open('', 'id_preview_window', 'height=600,width=1000,resizable=yes,scrollbars=yes');
+            
             if (isExistingPost) {
                 // For existing posts, use the preview URL
-                window.open(`/admin/core/post/preview/${postId}/`, '_blank');
+                win.location.href = `/admin/core/post/preview/${postId}/?_popup=1`;
             } else {
                 // For new posts, create a temporary preview
                 const form = document.querySelector('#post_form');
@@ -27,8 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Create a form to submit the preview data
                     const previewForm = document.createElement('form');
                     previewForm.method = 'POST';
-                    previewForm.action = '/admin/core/post/preview/new/';
-                    previewForm.target = '_blank';
+                    previewForm.action = '/admin/core/post/preview/new/?_popup=1';
+                    previewForm.target = 'id_preview_window';
                     
                     // Copy CSRF token
                     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
@@ -62,6 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.body.removeChild(previewForm);
                 }
             }
+            
+            win.focus();
+            return false;
         };
         
         // Add button to submit row
@@ -167,8 +173,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         formData.append('csrfmiddlewaretoken', csrfToken.value);
                     }
                     
-                    // Silent POST to update session
-                    fetch('/admin/core/post/preview/new/', {
+                    // Silent POST to update session (include popup parameter)
+                    fetch('/admin/core/post/preview/new/?_popup=1', {
                         method: 'POST',
                         body: formData,
                         credentials: 'same-origin'

@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview: {{ post.title }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #fff;
+            max-width: 100%;
+        }
+        .preview-header {
+            background-color: #79aec8;
+            color: white;
+            padding: 10px 20px;
+            margin: -20px -20px 20px -20px;
+            font-weight: bold;
+        }
+        .preview-header .close-btn {
+            float: right;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            line-height: 20px;
+        }
+        .preview-header .close-btn:hover {
+            text-decoration: none;
+            opacity: 0.8;
+        }
+        article {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+    {% if is_new %}
+    <!-- Auto-refresh every 2 seconds for new posts -->
+    <meta http-equiv="refresh" content="2">
+    {% endif %}
+</head>
+<body>
+    <div class="preview-header">
+        Preview Mode
+        <a href="#" class="close-btn" onclick="window.close(); return false;">&times;</a>
+    </div>
+    
+    <article>
+        <h2>{{ post.title }}</h2>
+        <p class="meta">
+            <time datetime="{{ post.published_date|date:'c' }}">
+                {% if post.published_date %}
+                    {{ post.published_date|date:"j M, Y" }}
+                {% else %}
+                    Not published yet
+                {% endif %}
+            </time>
+        </p>
+        
+        <div class="post-content">
+            {{ post.get_content_as_markdown }}
+        </div>
+    </article>
+</body>
+</html>
