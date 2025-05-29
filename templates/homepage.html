@@ -6,7 +6,11 @@
 {% if BLOG_FOOTER_LINKS %}
 <p>
     {% for name, url in BLOG_FOOTER_LINKS %}
-        <a href="{{ url }}">{{ name }}</a>
+        {% if url %}
+            <a href="{{ url }}">{{ name }}</a>
+        {% else %}
+            {{ name }}
+        {% endif %}
         {% if not forloop.last %}|{% endif %}
     {% endfor %}
 </p>
