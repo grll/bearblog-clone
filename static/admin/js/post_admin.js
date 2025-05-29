@@ -67,14 +67,93 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add button to submit row
         submitRow.insertBefore(previewBtn, submitRow.firstChild);
         
-        // Add a note about markdown
+        // Add a note about markdown and expand button
         const contentField = document.querySelector('#id_content');
         if (contentField) {
             const note = document.createElement('div');
             note.style.marginTop = '10px';
             note.style.color = '#666';
-            note.innerHTML = '<strong>Note:</strong> You can use Markdown formatting in your posts. Use the Preview button to see how it will look. The preview will auto-refresh every 2 seconds.';
+            note.innerHTML = '<strong>Note:</strong> You can use Markdown formatting in your posts. Use the Preview button to see how it will look. The preview will auto-refresh every 2 seconds. <br>Press <code>Ctrl+E</code> (or <code>Cmd+E</code> on Mac) to expand/collapse the editor.';
             contentField.parentNode.appendChild(note);
+            
+            // Add expand/collapse button
+            const expandBtn = document.createElement('button');
+            expandBtn.type = 'button';
+            expandBtn.textContent = '⛶ Expand Editor';
+            expandBtn.style.marginTop = '10px';
+            expandBtn.style.padding = '5px 10px';
+            expandBtn.style.cursor = 'pointer';
+            
+            let isExpanded = false;
+            
+            expandBtn.onclick = function() {
+                if (!isExpanded) {
+                    // Store original styles
+                    contentField.dataset.originalHeight = contentField.style.height;
+                    
+                    // Expand to almost fullscreen
+                    contentField.style.position = 'fixed';
+                    contentField.style.top = '50px';
+                    contentField.style.left = '10px';
+                    contentField.style.right = '10px';
+                    contentField.style.bottom = '10px';
+                    contentField.style.width = 'calc(100% - 20px)';
+                    contentField.style.height = 'calc(100vh - 60px)';
+                    contentField.style.zIndex = '9999';
+                    contentField.style.backgroundColor = 'white';
+                    contentField.style.border = '2px solid #79aec8';
+                    contentField.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+                    
+                    expandBtn.textContent = '✕ Collapse Editor';
+                    expandBtn.style.position = 'fixed';
+                    expandBtn.style.top = '10px';
+                    expandBtn.style.right = '10px';
+                    expandBtn.style.zIndex = '10000';
+                    expandBtn.style.backgroundColor = '#79aec8';
+                    expandBtn.style.color = 'white';
+                    expandBtn.style.border = 'none';
+                    expandBtn.style.borderRadius = '4px';
+                    expandBtn.style.padding = '10px 20px';
+                    
+                    isExpanded = true;
+                } else {
+                    // Restore original styles
+                    contentField.style.position = '';
+                    contentField.style.top = '';
+                    contentField.style.left = '';
+                    contentField.style.right = '';
+                    contentField.style.bottom = '';
+                    contentField.style.width = '';
+                    contentField.style.height = contentField.dataset.originalHeight || '';
+                    contentField.style.zIndex = '';
+                    contentField.style.backgroundColor = '';
+                    contentField.style.border = '';
+                    contentField.style.boxShadow = '';
+                    
+                    expandBtn.textContent = '⛶ Expand Editor';
+                    expandBtn.style.position = '';
+                    expandBtn.style.top = '';
+                    expandBtn.style.right = '';
+                    expandBtn.style.zIndex = '';
+                    expandBtn.style.backgroundColor = '';
+                    expandBtn.style.color = '';
+                    expandBtn.style.border = '';
+                    expandBtn.style.borderRadius = '';
+                    expandBtn.style.padding = '5px 10px';
+                    
+                    isExpanded = false;
+                }
+            };
+            
+            contentField.parentNode.appendChild(expandBtn);
+            
+            // Add keyboard shortcut (Ctrl/Cmd + E)
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+                    e.preventDefault();
+                    expandBtn.click();
+                }
+            });
         }
         
         // Auto-update preview data every 2 seconds
