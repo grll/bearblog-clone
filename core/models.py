@@ -32,6 +32,12 @@ class Post(models.Model):
         """Convert markdown content to HTML."""
         md = markdown.Markdown(extensions=["extra", "codehilite", "toc"])
         return mark_safe(md.convert(self.content))
+    
+    def get_image_markdown(self):
+        """Get markdown syntax for the image."""
+        if self.image:
+            return f"![{self.image.name}]({self.image.url})"
+        return ""
 
     def __str__(self):
         return self.title

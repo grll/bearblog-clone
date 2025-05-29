@@ -168,20 +168,90 @@ document.addEventListener('DOMContentLoaded', function() {
             insertBtn.style.cursor = 'pointer';
             insertBtn.disabled = true;
             
+            // Check if there's already an image uploaded
+            // Add timeout to ensure DOM is fully loaded  
+            setTimeout(function() {
+                const currentlyLink = imageField.parentNode.querySelector('a[href*="/media/post_images/"]');
+                if (currentlyLink && currentlyLink.href) {
+                    insertBtn.disabled = false;
+                }
+            }, 100);
+            
             // Enable button when image is selected
             imageField.addEventListener('change', function() {
                 insertBtn.disabled = !this.value;
+                
+                // For new posts, auto-upload the image when selected
+                if (this.files && this.files[0] && window.location.pathname.includes('/add/')) {
+                    const formData = new FormData();
+                    formData.append('image', this.files[0]);
+                    
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+                    if (csrfToken) {
+                        formData.append('csrfmiddlewaretoken', csrfToken.value);
+                    }
+                    
+                    // Upload image immediately for preview purposes
+                    fetch('/admin/core/post/upload-image/', {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'same-origin'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Store the uploaded image URL for use in preview
+                            window.uploadedImageUrl = data.url;
+                            insertBtn.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Image upload failed:', error);
+                    });
+                }
             });
             
             // Handle insert click
             insertBtn.onclick = function() {
-                const imageName = imageField.value.split('\\').pop().split('/').pop();
-                if (imageName) {
-                    // For existing posts with saved images, construct the URL
-                    // For new posts, use the filename placeholder
-                    const imageMarkdown = isExistingPost && imageField.value.includes('post_images/') 
-                        ? `![${imageName}](${imageField.value})`
-                        : `![${imageName}](/media/post_images/${imageName})`;
+                // Check if we're looking at a saved image
+                const currentlyDisplayed = imageField.parentNode.querySelector('a[href*="/media/post_images/"]');
+                if (currentlyDisplayed && currentlyDisplayed.href) {
+                    // Extract filename from the URL
+                    const imageUrl = currentlyDisplayed.href;
+                    const imageName = imageUrl.split('/').pop();
+                    const imageMarkdown = `![${imageName}](${imageUrl})`;
+                    
+                    // Insert at cursor position or append
+                    const cursorPos = contentField.selectionStart;
+                    const textBefore = contentField.value.substring(0, cursorPos);
+                    const textAfter = contentField.value.substring(cursorPos);
+                    
+                    contentField.value = textBefore + '\n\n' + imageMarkdown + '\n\n' + textAfter;
+                    contentField.focus();
+                    
+                    // Update cursor position
+                    const newPos = cursorPos + imageMarkdown.length + 4;
+                    contentField.setSelectionRange(newPos, newPos);
+                } else if (window.uploadedImageUrl) {
+                    // For new posts with uploaded image
+                    const imageName = window.uploadedImageUrl.split('/').pop();
+                    const imageMarkdown = `![${imageName}](${window.uploadedImageUrl})`;
+                    
+                    // Insert at cursor position or append
+                    const cursorPos = contentField.selectionStart;
+                    const textBefore = contentField.value.substring(0, cursorPos);
+                    const textAfter = contentField.value.substring(cursorPos);
+                    
+                    contentField.value = textBefore + '\n\n' + imageMarkdown + '\n\n' + textAfter;
+                    contentField.focus();
+                    
+                    // Update cursor position
+                    const newPos = cursorPos + imageMarkdown.length + 4;
+                    contentField.setSelectionRange(newPos, newPos);
+                } else if (imageField.value) {
+                    // Fallback for new images not yet uploaded
+                    const imageName = imageField.value.split('\\').pop().split('/').pop();
+                    const imageMarkdown = `![${imageName}](/media/post_images/${imageName})`;
                     
                     // Insert at cursor position or append
                     const cursorPos = contentField.selectionStart;
@@ -205,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
             helpText.style.marginTop = '5px';
             helpText.style.fontSize = '11px';
             helpText.style.color = '#666';
-            helpText.innerHTML = 'Upload an image, then click "Insert Image into Content" to add it to your post.';
+            helpText.innerHTML = 'Upload an image, then click "Insert Image into Content" to add it to your post.<br><strong>Note:</strong> For new posts, images will only display after saving the post.';
             imageField.parentNode.appendChild(helpText);
         }
         

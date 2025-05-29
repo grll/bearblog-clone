@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import os
 from .models import Post
 
 
@@ -34,6 +38,11 @@ class PostAdmin(admin.ModelAdmin):
                 "preview/new/",
                 self.admin_site.admin_view(self.preview_new_post),
                 name="core_post_preview_new",
+            ),
+            path(
+                "upload-image/",
+                self.admin_site.admin_view(self.upload_image),
+                name="core_post_upload_image",
             ),
         ]
         return custom_urls + urls
@@ -109,3 +118,26 @@ class PostAdmin(admin.ModelAdmin):
                 "is_popup": is_popup,
             },
         )
+
+    def upload_image(self, request):
+        """Upload image for preview in new posts."""
+        if request.method != "POST" or not request.FILES.get("image"):
+            return JsonResponse({"success": False, "error": "No image provided"})
+
+        image_file = request.FILES["image"]
+        
+        # Generate a unique filename
+        filename = f"preview_{image_file.name}"
+        file_path = f"post_images/{filename}"
+        
+        # Save the file
+        saved_path = default_storage.save(file_path, ContentFile(image_file.read()))
+        
+        # Return the URL
+        image_url = request.build_absolute_uri(default_storage.url(saved_path))
+        
+        return JsonResponse({
+            "success": True,
+            "url": image_url,
+            "filename": filename
+        })
