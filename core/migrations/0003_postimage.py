@@ -5,24 +5,50 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0002_post_image_alter_post_content'),
+        ("core", "0002_post_image_alter_post_content"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PostImage',
+            name="PostImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='post_images/')),
-                ('caption', models.CharField(blank=True, help_text='Optional caption for the image', max_length=200)),
-                ('order', models.PositiveIntegerField(default=0, help_text='Order of display (lower numbers first)')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='core.post')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="post_images/")),
+                (
+                    "caption",
+                    models.CharField(
+                        blank=True,
+                        help_text="Optional caption for the image",
+                        max_length=200,
+                    ),
+                ),
+                (
+                    "order",
+                    models.PositiveIntegerField(
+                        default=0, help_text="Order of display (lower numbers first)"
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "post",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="core.post",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['order', 'created_at'],
+                "ordering": ["order", "created_at"],
             },
         ),
     ]
