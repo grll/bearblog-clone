@@ -3,29 +3,12 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 
-class Blog(models.Model):
-    """Simple blog model."""
-
-    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name="blog")
-    title = models.CharField(max_length=200)
-    subdomain = models.SlugField(max_length=50, unique=True)
-    description = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        ordering = ["-created_at"]
-
-
 class Post(models.Model):
     """Blog post model."""
 
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="posts")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
     content = models.TextField()
     published = models.BooleanField(default=False)
     published_date = models.DateTimeField(null=True, blank=True)
@@ -42,4 +25,3 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["-published_date", "-created_at"]
-        unique_together = ["blog", "slug"]

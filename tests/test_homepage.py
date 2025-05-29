@@ -28,7 +28,7 @@ def test_homepage_content():
 
     # Test navigation buttons (using Django admin)
     assert "Log in" in content
-    assert "Discover" in content
+    assert "Blog" in content
 
     # Test value proposition
     assert "This is a blogging platform where words matter most." in content
