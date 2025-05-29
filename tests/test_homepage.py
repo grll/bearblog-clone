@@ -26,5 +26,5 @@ def test_homepage_navigation():
     assert "Blog" in content
 
     # Test footer
-    assert "Powered by" in content
+    assert "Made with" in content
     assert "Bear ʕ•ᴥ•ʔ" in content
