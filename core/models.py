@@ -12,6 +12,12 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     content = models.TextField(help_text="You can use Markdown formatting")
+    image = models.ImageField(
+        upload_to="post_images/",
+        blank=True,
+        null=True,
+        help_text="Upload an image to include in your post",
+    )
     published = models.BooleanField(default=False)
     published_date = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

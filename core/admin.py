@@ -14,7 +14,7 @@ class PostAdmin(admin.ModelAdmin):
     ordering = ["-created_at"]
 
     fieldsets = (
-        (None, {"fields": ("author", "title", "slug", "content")}),
+        (None, {"fields": ("author", "title", "slug", "content", "image")}),
         ("Publishing", {"fields": ("published", "published_date")}),
     )
 

@@ -156,6 +156,59 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
+        // Add image helper
+        const imageField = document.querySelector('#id_image');
+        if (imageField && contentField) {
+            // Create insert image button
+            const insertBtn = document.createElement('button');
+            insertBtn.type = 'button';
+            insertBtn.textContent = '📷 Insert Image into Content';
+            insertBtn.style.marginLeft = '10px';
+            insertBtn.style.padding = '5px 10px';
+            insertBtn.style.cursor = 'pointer';
+            insertBtn.disabled = true;
+            
+            // Enable button when image is selected
+            imageField.addEventListener('change', function() {
+                insertBtn.disabled = !this.value;
+            });
+            
+            // Handle insert click
+            insertBtn.onclick = function() {
+                const imageName = imageField.value.split('\\').pop().split('/').pop();
+                if (imageName) {
+                    // For existing posts with saved images, construct the URL
+                    // For new posts, use the filename placeholder
+                    const imageMarkdown = isExistingPost && imageField.value.includes('post_images/') 
+                        ? `![${imageName}](${imageField.value})`
+                        : `![${imageName}](/media/post_images/${imageName})`;
+                    
+                    // Insert at cursor position or append
+                    const cursorPos = contentField.selectionStart;
+                    const textBefore = contentField.value.substring(0, cursorPos);
+                    const textAfter = contentField.value.substring(cursorPos);
+                    
+                    contentField.value = textBefore + '\n\n' + imageMarkdown + '\n\n' + textAfter;
+                    contentField.focus();
+                    
+                    // Update cursor position
+                    const newPos = cursorPos + imageMarkdown.length + 4;
+                    contentField.setSelectionRange(newPos, newPos);
+                }
+            };
+            
+            // Add button after image field
+            imageField.parentNode.appendChild(insertBtn);
+            
+            // Add help text
+            const helpText = document.createElement('div');
+            helpText.style.marginTop = '5px';
+            helpText.style.fontSize = '11px';
+            helpText.style.color = '#666';
+            helpText.innerHTML = 'Upload an image, then click "Insert Image into Content" to add it to your post.';
+            imageField.parentNode.appendChild(helpText);
+        }
+        
         // Auto-update preview data every 2 seconds for both new and existing posts
         setInterval(function() {
             const title = document.querySelector('#id_title');

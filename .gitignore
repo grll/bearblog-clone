@@ -36,3 +36,4 @@ htmlcov/
 # Server
 server.log
 nohup.out
+/media/
