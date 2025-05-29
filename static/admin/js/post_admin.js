@@ -184,6 +184,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     credentials: 'same-origin'
                 });
             }
-        }, 2000);
+        }, 1000);
     }
 });
