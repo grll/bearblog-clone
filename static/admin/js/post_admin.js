@@ -67,15 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add button to submit row
         submitRow.insertBefore(previewBtn, submitRow.firstChild);
         
-        // Add a note about markdown and expand button
+        // Add an expand button
         const contentField = document.querySelector('#id_content');
         if (contentField) {
-            const note = document.createElement('div');
-            note.style.marginTop = '10px';
-            note.style.color = '#666';
-            note.innerHTML = '<strong>Note:</strong> You can use Markdown formatting in your posts. Use the Preview button to see how it will look. The preview will auto-refresh every 2 seconds. <br>Press <code>Ctrl+E</code> (or <code>Cmd+E</code> on Mac) to expand/collapse the editor.';
-            contentField.parentNode.appendChild(note);
-            
             // Add expand/collapse button
             const expandBtn = document.createElement('button');
             expandBtn.type = 'button';
