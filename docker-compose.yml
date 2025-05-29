@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    volumes:
+      - ./data:/app/data
+      - ./media:/app/media
+      - static_collected:/app/static_collected
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - static_collected:/var/www/static:ro
+      - ./media:/var/www/media:ro
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  static_collected:
