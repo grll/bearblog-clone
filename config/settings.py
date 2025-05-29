@@ -143,6 +143,9 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     X_FRAME_OPTIONS = "DENY"
+    
+    # CSRF settings for Cloudflare
+    CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if host not in ["localhost", "127.0.0.1", "testserver"]]
 
 # Blog settings
 BLOG_TITLE = "Guillaume Raille"
