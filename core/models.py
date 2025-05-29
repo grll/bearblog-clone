@@ -23,8 +23,21 @@ class Post(models.Model):
         super().save(*args, **kwargs)
 
     def get_content_as_markdown(self):
-        """Convert markdown content to HTML."""
-        md = markdown.Markdown(extensions=["extra", "codehilite", "toc"])
+        """Convert markdown content to HTML with syntax highlighting."""
+        md = markdown.Markdown(
+            extensions=[
+                "extra",
+                "codehilite", 
+                "toc"
+            ],
+            extension_configs={
+                "codehilite": {
+                    "css_class": "highlight",
+                    "use_pygments": True,
+                    "guess_lang": False,
+                }
+            }
+        )
         return mark_safe(md.convert(self.content))
     
 

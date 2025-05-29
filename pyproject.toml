@@ -8,6 +8,7 @@ dependencies = [
     "django>=5.2.1",
     "markdown>=3.8",
     "pillow>=11.2.1",
+    "pygments>=2.19.1",
 ]
 
 [dependency-groups]

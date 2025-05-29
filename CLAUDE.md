@@ -3,3 +3,4 @@
 * Add tests with pytest in the `tests` folder.
 * ALWAYS favor minimalism and simplicity over complicated abstraction and extreme modularity.
 * The admin username and password is admin / admin
+* Use uv for python command: `uv run python cmd`
