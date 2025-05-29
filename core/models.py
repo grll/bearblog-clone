@@ -27,12 +27,6 @@ class Post(models.Model):
         md = markdown.Markdown(extensions=["extra", "codehilite", "toc"])
         return mark_safe(md.convert(self.content))
     
-    def get_all_images_markdown(self):
-        """Get markdown syntax for all PostImage instances."""
-        markdown_list = []
-        for img in self.images.all():
-            markdown_list.append(img.get_markdown())
-        return "\n\n".join(markdown_list)
 
     def __str__(self):
         return self.title

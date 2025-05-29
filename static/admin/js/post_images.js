@@ -1,52 +1,35 @@
 // Use setTimeout to ensure DOM is fully loaded and inlines are initialized
 setTimeout(function() {
-    console.log('PostImages JavaScript initializing...');
-    
     // Handle PostImage inline forms - try multiple selectors
     let mainInlineGroup = document.querySelector('#postimage_set-group');
     if (!mainInlineGroup) {
         mainInlineGroup = document.querySelector('.inline-group');
         if (!mainInlineGroup) {
-            console.log('No inline group found, trying again in 500ms...');
             setTimeout(arguments.callee, 500);
             return;
         }
     }
     
-    console.log('Found inline group:', mainInlineGroup.id || mainInlineGroup.className);
-    
     
     // Function to add insert buttons to each image row
     function addInsertButtons() {
-        // Look for table rows in the images inline section - but skip header and add-row
         const imageTable = document.querySelector('.inline-group table');
-        if (!imageTable) {
-            console.log('No image table found');
-            return;
-        }
+        if (!imageTable) return;
         
         // Get all rows except the header row and "Add another" row
         const allRows = imageTable.querySelectorAll('tbody tr');
         const imageRows = Array.from(allRows).filter(row => {
             return !row.textContent.includes('Add another Image') && 
-                   !row.querySelector('th') && // not header
-                   row.querySelector('input[type="file"]'); // has file input
+                   !row.querySelector('th') && 
+                   row.querySelector('input[type="file"]');
         });
         
-        console.log('Found image rows:', imageRows.length);
-        
         imageRows.forEach(function(row, index) {
-            console.log('Processing row', index);
             const imageField = row.querySelector('input[type="file"]');
             const captionField = row.querySelector('input[id*="caption"]');
             const orderField = row.querySelector('input[id*="order"]');
             
-            if (!imageField) {
-                console.log('No image field found in row', index);
-                return;
-            }
-            
-            console.log('Image field found:', imageField.name, 'value:', imageField.value);
+            if (!imageField) return;
             
             // Set default order if empty
             if (orderField && !orderField.value) {
@@ -70,7 +53,6 @@ setTimeout(function() {
             const hasFileSelected = imageField.files && imageField.files.length > 0;
             
             insertBtn.disabled = !(currentImage || hasFileSelected);
-            console.log('Button created for row', index, 'disabled:', insertBtn.disabled);
             
             // Enable button when new image is selected
             imageField.addEventListener('change', function() {
@@ -107,7 +89,6 @@ setTimeout(function() {
                         }
                     })
                     .catch(error => {
-                        console.error('Image upload failed:', error);
                         const helpText = row.querySelector('.image-upload-help');
                         if (helpText) {
                             helpText.innerHTML = '❌ Upload failed. Image will be available after saving the post.';
@@ -162,13 +143,10 @@ setTimeout(function() {
                 }
             };
             
-            // Add button after the image field's cell
+            // Add button to the image field's cell
             const imageCell = imageField.closest('td');
             if (imageCell) {
                 imageCell.appendChild(insertBtn);
-                console.log('Added insert button to image cell');
-            } else {
-                console.log('Could not find image cell for button placement');
             }
             
             // Add help text for upload status
@@ -190,15 +168,9 @@ setTimeout(function() {
         });
     }
     
-    // Add buttons initially
-    console.log('Initial call to addInsertButtons');
+    // Add buttons initially and after a short delay for DOM changes
     addInsertButtons();
-    
-    // Also try again after a short delay in case the DOM changes
-    setTimeout(function() {
-        console.log('Delayed call to addInsertButtons');
-        addInsertButtons();
-    }, 2000);
+    setTimeout(addInsertButtons, 2000);
     
     // Re-add buttons when new inline forms are added
     const observer = new MutationObserver(function(mutations) {
